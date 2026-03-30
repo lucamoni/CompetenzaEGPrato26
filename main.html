@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantiere Scout 2026 - Da Prato con Avventura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #fefce8; 
+            color: #422006;
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+        }
+        .adventure-card {
+            transition: all 0.25s ease-out;
+        }
+        .adventure-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .filter-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23422006' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 1em;
+        }
+        input[type=range] {
+            accent-color: #059669;
+        }
+        .tab-active {
+            background-color: #ffffff;
+            color: #064e3b;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-emerald-900 text-white py-12 px-6 shadow-lg text-center relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-block bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest py-1 px-3 rounded-full mb-4 animate-pulse">Apertura Candidature: 7-13 Aprile</span>
+            <h1 class="text-4xl md:text-5xl font-black mb-3 tracking-tight text-white">⚜️ Verso la Competenza 2026</h1>
+            <p class="text-emerald-100 text-base md:text-lg font-medium opacity-90 max-w-2xl mx-auto">
+                Parti da <strong>Prato (PO)</strong> e conquista la tua specialità. Usa i filtri o scopri come iscriverti!
+            </p>
+        </div>
+        <div class="absolute -bottom-4 left-4 text-8xl opacity-10 grayscale-0">⚜️</div>
+        <div class="absolute -top-4 right-4 text-8xl opacity-10 grayscale-0">🧭</div>
+    </header>
+
+    <!-- Navigazione Tab -->
+    <nav class="max-w-md mx-auto mt-4 px-4 w-full flex justify-center p-1 bg-emerald-800/20 rounded-2xl">
+        <button id="btn-list" class="flex-1 py-2 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all tab-active">
+            ⛺ Lista Cantieri
+        </button>
+        <button id="btn-info" class="flex-1 py-2 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all text-emerald-900/60">
+            ℹ️ Info Iscrizioni
+        </button>
+    </nav>
+
+    <!-- SCHEDA 1: LISTA E FILTRI -->
+    <div id="section-list">
+        <section class="max-w-7xl mx-auto mt-6 px-4 w-full">
+            <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-10 border-b-8 border-emerald-700">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-emerald-900 uppercase mb-2 ml-1">Attività</label>
+                        <select id="area-select" class="filter-select w-full bg-stone-50 border-2 border-stone-100 rounded-2xl py-3 px-4 focus:border-emerald-500 outline-none text-stone-800 font-bold text-sm transition-all">
+                            <option value="All">Qualsiasi Ambito</option>
+                            <option value="Pionieristica e Vita all'Aperto">⛺ Natura e Costruzioni</option>
+                            <option value="Nautica">🛶 Acqua e Vela</option>
+                            <option value="Mani Abili, Arte e Comunicazione">🎨 Arte e Creatività</option>
+                            <option value="Sociale, Sport e Liturgia">🤝 Insieme e Servizio</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-emerald-900 uppercase mb-2 ml-1">Regione</label>
+                        <select id="region-select" class="filter-select w-full bg-stone-50 border-2 border-stone-100 rounded-2xl py-3 px-4 focus:border-emerald-500 outline-none text-stone-800 font-bold text-sm transition-all">
+                            <option value="All">Tutta Italia</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-emerald-900 uppercase mb-2 ml-1">Periodo</label>
+                        <select id="month-select" class="filter-select w-full bg-stone-50 border-2 border-stone-100 rounded-2xl py-3 px-4 focus:border-emerald-500 outline-none text-stone-800 font-bold text-sm transition-all">
+                            <option value="All">Qualsiasi mese</option>
+                            <option value="Maggio / Giugno">Giugno</option>
+                            <option value="Luglio">Luglio</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Settembre">Settembre</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-[10px] font-black text-emerald-900 uppercase mb-2 ml-1 text-center md:text-left">Km da Prato</label>
+                        <div class="px-1">
+                            <input type="range" id="distance-slider" min="30" max="1000" value="1000" class="w-full h-2 bg-stone-100 rounded-lg appearance-none cursor-pointer mt-3">
+                            <div class="flex justify-between text-[10px] font-bold text-emerald-600 mt-2">
+                                <span id="distance-value">Qualsiasi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end">
+                        <button id="reset-btn" class="w-full bg-stone-100 hover:bg-orange-500 hover:text-white text-stone-600 font-black py-3 px-4 rounded-2xl transition-all text-[11px] uppercase tracking-widest text-center">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
+                <div id="result-count" class="mt-6 text-center text-[10px] font-black text-emerald-600 uppercase tracking-widest opacity-70">
+                    Caricamento...
+                </div>
+            </div>
+        </section>
+
+        <main class="max-w-7xl mx-auto px-4 py-12 w-full flex-grow">
+            <div id="adventure-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card popolate via JS -->
+            </div>
+            <div id="no-results" class="hidden text-center py-20 bg-white rounded-[3rem] border-4 border-dotted border-stone-200">
+                <div class="text-7xl mb-4 text-stone-200 grayscale">🔦</div>
+                <h3 class="text-2xl font-black text-stone-800">Nessuna avventura trovata!</h3>
+                <p class="text-stone-500 mt-2 font-medium">Prova a cambiare i filtri o ad aumentare i chilometri.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCHEDA 2: MODALITÀ DI ISCRIZIONE -->
+    <div id="section-info" class="hidden max-w-5xl mx-auto px-4 py-12 w-full flex-grow">
+        <div class="bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border-b-8 border-orange-500">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-emerald-950 mb-4 uppercase italic tracking-tight">📝 Modalità Iscrizione 2026</h2>
+                <p class="text-stone-500 max-w-2xl mx-auto font-medium">Addio "click-day"! Dal 2024 è in vigore una modalità equa che garantisce a tutti le stesse possibilità di partecipazione.</p>
+            </div>
+
+            <div class="bg-orange-50 border-2 border-orange-100 rounded-3xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-5">
+                    <div class="bg-orange-500 text-white p-4 rounded-2xl text-2xl">📅</div>
+                    <div>
+                        <h4 class="font-black text-emerald-950 uppercase text-sm">Fase 1: Apertura Candidature</h4>
+                        <p class="text-orange-700 font-bold text-lg">Dal 7 al 13 Aprile 2026</p>
+                    </div>
+                </div>
+                <div class="text-xs text-orange-800 md:text-right max-w-xs leading-relaxed">
+                    I posti sono illimitati e <strong>l'ordine non conta</strong>. Chi si iscrive il 7 aprile ha le stesse probabilità di chi si iscrive il 13!
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-stone-50 p-8 rounded-3xl border-t-8 border-emerald-600 adventure-card">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-md">1</span>
+                        <h3 class="text-xl font-black text-emerald-950 uppercase italic tracking-tighter">Candidatura</h3>
+                    </div>
+                    <p class="text-sm leading-relaxed text-stone-600 mb-4">
+                        I Capi reparto caricano su BuonaCaccia la scheda dell'E/G (tappa, brevetto, annualità). Ogni ragazzo può essere candidato a <strong>massimo 3 campi</strong> attinenti al proprio brevetto.
+                    </p>
+                    <div class="bg-white p-3 rounded-xl border border-stone-200 text-[10px] font-bold text-stone-500 italic">
+                        Limite: max 2 candidature per unità per ogni singolo evento.
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-8 rounded-3xl border-t-8 border-orange-500 adventure-card">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="bg-orange-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-md">2</span>
+                        <h3 class="text-xl font-black text-emerald-950 uppercase italic tracking-tighter">Sorteggio</h3>
+                    </div>
+                    <p class="text-sm leading-relaxed text-stone-600">
+                        Un algoritmo effettua il sorteggio bilanciando i sessi. 
+                        <strong>Priorità a:</strong> chi è in tappa della competenza, chi non ha mai fatto un campo CComp e chi ha ancora anni di reparto. Gli esiti arrivano via email.
+                    </p>
+                </div>
+
+                <div class="bg-stone-50 p-8 rounded-3xl border-t-8 border-blue-500 adventure-card">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-md">3</span>
+                        <h3 class="text-xl font-black text-emerald-950 uppercase italic tracking-tighter">Conferma</h3>
+                    </div>
+                    <p class="text-sm leading-relaxed text-stone-600 mb-4">
+                        Se sorteggiato (o in lista d'attesa), hai <strong>9 giorni</strong> per confermare pagando la quota di <strong>€ 50,00</strong>.
+                    </p>
+                    <div class="bg-blue-100/50 p-3 rounded-xl text-blue-900 text-[10px] font-bold">
+                        IMPORTANTE: Trascorsi i 9 giorni senza pagamento, l'iscrizione decade e la lista scorre.
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-8 rounded-3xl border-t-8 border-purple-500 adventure-card">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="bg-purple-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-lg shadow-md">4</span>
+                        <h3 class="text-xl font-black text-emerald-950 uppercase italic tracking-tighter">Iscrizioni Libere</h3>
+                    </div>
+                    <p class="text-sm leading-relaxed text-stone-600">
+                        I posti rimanenti vengono riaperti in modalità classica (chi arriva prima occupa il posto). Non sono più possibili nuove candidature, ma solo iscrizioni dirette agli eventi con posti liberi.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 p-8 bg-emerald-950 rounded-[2.5rem] text-emerald-100 border-l-8 border-emerald-500">
+                <h4 class="font-black uppercase text-sm mb-6 border-b border-emerald-800 pb-2">🔗 Risorse Ufficiali</h4>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <a href="https://competenze.agesci.it/2024/04/16/nuove-modalita-iscrizione/" target="_blank" class="flex-1 bg-emerald-900 hover:bg-emerald-800 p-5 rounded-2xl transition-all border border-emerald-700 shadow-xl group">
+                        <p class="font-bold text-white text-sm mb-1 group-hover:text-emerald-300">Nuove Modalità di Iscrizione</p>
+                        <p class="text-[10px] opacity-70 italic">Sito ufficiale Settore Competenze AGESCI</p>
+                    </a>
+                    <a href="https://buonacaccia.net/Events.aspx?RID=A" target="_blank" class="flex-1 bg-emerald-900 hover:bg-emerald-800 p-5 rounded-2xl transition-all border border-emerald-700 shadow-xl group">
+                        <p class="font-bold text-white text-sm mb-1 group-hover:text-emerald-300">BuonaCaccia: Estate 2026</p>
+                        <p class="text-[10px] opacity-70 italic">Visualizza tutti i campi disponibili</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const regionConfigs = {
+            "Campania": { icon: "🌋", color: "border-orange-400", badge: "bg-orange-400" },
+            "Emilia Romagna": { icon: "🏰", color: "border-red-400", badge: "bg-red-400" },
+            "Veneto": { icon: "🦁", color: "border-yellow-500", badge: "bg-yellow-500" },
+            "Lombardia": { icon: "🏗️", color: "border-green-500", badge: "bg-green-500" },
+            "Lazio": { icon: "🏛️", color: "border-blue-600", badge: "bg-blue-600" },
+            "Puglia": { icon: "☀️", color: "border-orange-500", badge: "bg-orange-500" },
+            "Marche": { icon: "⛰️", color: "border-pink-400", badge: "bg-pink-400" },
+            "Toscana": { icon: "⚜️", color: "border-emerald-600", badge: "bg-emerald-600" },
+            "Sicilia": { icon: "🍋", color: "border-yellow-400", badge: "bg-yellow-400" },
+            "Sardegna": { icon: "🏝️", color: "border-cyan-500", badge: "bg-cyan-500" },
+            "Piemonte": { icon: "🏔️", color: "border-indigo-400", badge: "bg-indigo-400" },
+            "Friuli Venezia Giulia": { icon: "🛡️", color: "border-teal-400", badge: "bg-teal-400" },
+            "Umbria": { icon: "⛪", color: "border-stone-400", badge: "bg-stone-400" },
+            "Valle d'Aosta": { icon: "❄️", color: "border-blue-300", badge: "bg-blue-300" },
+            "Molise": { icon: "🌲", color: "border-emerald-400", badge: "bg-emerald-400" },
+            "Calabria": { icon: "🌶️", color: "border-red-600", badge: "bg-red-600" },
+            "Trentino Alto Adige": { icon: "🦅", color: "border-red-700", badge: "bg-red-700" },
+            "Abruzzo": { icon: "🐺", color: "border-green-700", badge: "bg-green-700" }
+        };
+
+        const cantieri = [
+            { id: "25610", period: "29/05 - 02/06", month: "Maggio / Giugno", region: "Campania", specialty: "Pioniere", location: "Marigliano (NA)", area: ["Pionieristica e Vita all'Aperto"], km: 485 },
+            { id: "25611", period: "06/06 - 10/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Pioniere - Animatore sportivo", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto", "Sociale, Sport e Liturgia"], km: 195 },
+            { id: "25612", period: "10/06 - 14/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Pioniere - Trappeur", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25613", period: "10/06 - 14/06", month: "Maggio / Giugno", region: "Veneto", specialty: "Sherpa", location: "Monteviale (VI)", area: ["Pionieristica e Vita all'Aperto"], km: 240 },
+            { id: "25756", period: "12/06 - 17/06", month: "Maggio / Giugno", region: "Lombardia", specialty: "Soccorritore", location: "Brescia (BS)", area: ["Sociale, Sport e Liturgia"], km: 245 },
+            { id: "25614", period: "16/06 - 21/06", month: "Maggio / Giugno", region: "Campania", specialty: "Pioniere A", location: "Salerno (SA)", area: ["Pionieristica e Vita all'Aperto"], km: 520 },
+            { id: "25616", period: "16/06 - 21/06", month: "Maggio / Giugno", region: "Lazio", specialty: "Sherpa", location: "Vallinfreda (RM)", area: ["Pionieristica e Vita all'Aperto"], km: 320 },
+            { id: "25615", period: "16/06 - 21/06", month: "Maggio / Giugno", region: "Puglia", specialty: "Mani abili - Artista", location: "Giovinazzo (BA)", area: ["Mani Abili, Arte e Comunicazione"], km: 640 },
+            { id: "25618", period: "17/06 - 21/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Pioniere", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25617", period: "17/06 - 21/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Pioniere - Espl. acque", location: "Castel di Casio (BO)", area: ["Pionieristica e Vita all'Aperto", "Nautica"], km: 45 },
+            { id: "25619", period: "17/06 - 21/06", month: "Maggio / Giugno", region: "Marche", specialty: "Pioniere", location: "Fabriano (AN)", area: ["Pionieristica e Vita all'Aperto"], km: 190 },
+            { id: "25620", period: "17/06 - 21/06", month: "Maggio / Giugno", region: "Toscana", specialty: "Trappeur", location: "Borgo S. Lorenzo (FI)", area: ["Pionieristica e Vita all'Aperto"], km: 35 },
+            { id: "25621", period: "18/06 - 22/06", month: "Maggio / Giugno", region: "Sicilia", specialty: "Pioniere - Trappeur", location: "Marineo (PA)", area: ["Pionieristica e Vita all'Aperto"], km: 860 },
+            { id: "25622", period: "19/06 - 23/06", month: "Maggio / Giugno", region: "Sardegna", specialty: "Mani abili - Maestro tecnologie", location: "Abbasanta (OR)", area: ["Mani Abili, Arte e Comunicazione"], km: 580 },
+            { id: "25624", period: "21/06 - 25/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Trappeur", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25625", period: "21/06 - 26/06", month: "Maggio / Giugno", region: "Lazio", specialty: "Pioniere", location: "Bracciano (RM)", area: ["Pionieristica e Vita all'Aperto"], km: 260 },
+            { id: "25626", period: "23/06 - 27/06", month: "Maggio / Giugno", region: "Piemonte", specialty: "Mani abili", location: "Cantalupa (TO)", area: ["Mani Abili, Arte e Comunicazione"], km: 360 },
+            { id: "25630", period: "24/06 - 28/06", month: "Maggio / Giugno", region: "Sicilia", specialty: "Cittadino del mondo", location: "Palermo (PA)", area: ["Sociale, Sport e Liturgia"], km: 850 },
+            { id: "25629", period: "24/06 - 28/06", month: "Maggio / Giugno", region: "Sicilia", specialty: "Soccorritore", location: "Palermo (PA)", area: ["Sociale, Sport e Liturgia"], km: 850 },
+            { id: "25747", period: "24/06 - 28/06", month: "Maggio / Giugno", region: "Toscana", specialty: "Cittadino del mondo", location: "Arezzo (AR)", area: ["Sociale, Sport e Liturgia"], km: 100 },
+            { id: "25631", period: "24/06 - 28/06", month: "Maggio / Giugno", region: "Veneto", specialty: "Pioniere - Animatore sportivo", location: "Monteviale (VI)", area: ["Pionieristica e Vita all'Aperto", "Sociale, Sport e Liturgia"], km: 240 },
+            { id: "25636", period: "25/06 - 29/06", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Pioniere B", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25632", period: "25/06 - 29/06", month: "Maggio / Giugno", region: "Toscana", specialty: "Artista", location: "Borgo San Lorenzo (FI)", area: ["Mani Abili, Arte e Comunicazione"], km: 35 },
+            { id: "25641", period: "26/06 - 30/06", month: "Maggio / Giugno", region: "Campania", specialty: "Mani abili", location: "Teano (CE)", area: ["Mani Abili, Arte e Comunicazione"], km: 430 },
+            { id: "25637", period: "26/06 - 30/06", month: "Maggio / Giugno", region: "Friuli Venezia Giulia", specialty: "Mani abili - Espl. acque", location: "Tramonti di Sotto (PN)", area: ["Mani Abili, Arte e Comunicazione", "Nautica"], km: 410 },
+            { id: "25642", period: "26/06 - 01/07", month: "Maggio / Giugno", region: "Lazio", specialty: "Mani abili", location: "Bellegra (RM)", area: ["Mani Abili, Arte e Comunicazione"], km: 320 },
+            { id: "25639", period: "26/06 - 30/06", month: "Maggio / Giugno", region: "Lazio", specialty: "Trappeur", location: "Oriolo Romano (VT)", area: ["Pionieristica e Vita all'Aperto"], km: 240 },
+            { id: "25638", period: "26/06 - 30/06", month: "Maggio / Giugno", region: "Lombardia", specialty: "Naturalista", location: "Brescia (BS)", area: ["Pionieristica e Vita all'Aperto"], km: 245 },
+            { id: "25640", period: "26/06 - 30/06", month: "Maggio / Giugno", region: "Sicilia", specialty: "Artista - Mani abili", location: "Marineo (PA)", area: ["Mani Abili, Arte e Comunicazione"], km: 860 },
+            { id: "25643", period: "26/06 - 01/07", month: "Maggio / Giugno", region: "Umbria", specialty: "Trappeur", location: "Nocera Umbra (PG)", area: ["Pionieristica e Vita all'Aperto"], km: 205 },
+            { id: "25645", period: "27/06 - 01/07", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Soccorritore", location: "Meldola (FC)", area: ["Sociale, Sport e Liturgia"], km: 125 },
+            { id: "25653", period: "27/06 - 01/07", month: "Maggio / Giugno", region: "Lazio", specialty: "Artista", location: "Bracciano (RM)", area: ["Mani Abili, Arte e Comunicazione"], km: 260 },
+            { id: "25754", period: "27/06 - 02/07", month: "Maggio / Giugno", region: "Lombardia", specialty: "Guida alpina - Sherpa", location: "Capovalle (BS)", area: ["Pionieristica e Vita all'Aperto"], km: 260 },
+            { id: "25675", period: "27/06 - 02/07", month: "Maggio / Giugno", region: "Lombardia", specialty: "Sherpa", location: "Colico (LC)", area: ["Pionieristica e Vita all'Aperto"], km: 330 },
+            { id: "25647", period: "27/06 - 01/07", month: "Maggio / Giugno", region: "Toscana", specialty: "Guida alpina", location: "Stazzema (LU)", area: ["Pionieristica e Vita all'Aperto"], km: 90 },
+            { id: "25664", period: "27/06 - 01/07", month: "Maggio / Giugno", region: "Valle d'Aosta", specialty: "Trappeur", location: "Saint-Nicolas (AO)", area: ["Pionieristica e Vita all'Aperto"], km: 410 },
+            { id: "25644", period: "27/06 - 01/07", month: "Maggio / Giugno", region: "Veneto", specialty: "Guida alpina", location: "San Zeno di Montagna (VR)", area: ["Pionieristica e Vita all'Aperto"], km: 265 },
+            { id: "25677", period: "29/06 - 03/07", month: "Maggio / Giugno", region: "Emilia Romagna", specialty: "Soccorritore A", location: "Bettola (PC)", area: ["Sociale, Sport e Liturgia"], km: 195 },
+            { id: "25679", period: "29/06 - 04/07", month: "Maggio / Giugno", region: "Puglia", specialty: "Pioniere", location: "Cassano delle Murge (BA)", area: ["Pionieristica e Vita all'Aperto"], km: 660 },
+            { id: "25681", period: "30/06 - 05/07", month: "Maggio / Giugno", region: "Campania", specialty: "Mani abili A", location: "Salerno (SA)", area: ["Mani Abili, Arte e Comunicazione"], km: 520 },
+            { id: "25680", period: "30/06 - 05/07", month: "Maggio / Giugno", region: "Marche", specialty: "Mani abili", location: "Fabriano (AN)", area: ["Mani Abili, Arte e Comunicazione"], km: 190 },
+            { id: "25684", period: "01/07 - 05/07", month: "Luglio", region: "Campania", specialty: "Artista", location: "Marigliano (NA)", area: ["Mani Abili, Arte e Comunicazione"], km: 485 },
+            { id: "25682", period: "01/07 - 05/07", month: "Luglio", region: "Lazio", specialty: "Esploratore delle acque", location: "Bracciano (RM)", area: ["Nautica"], km: 260 },
+            { id: "25683", period: "01/07 - 05/07", month: "Luglio", region: "Molise", specialty: "Sherpa", location: "Campochiaro (CB)", area: ["Pionieristica e Vita all'Aperto"], km: 480 },
+            { id: "25687", period: "02/07 - 06/07", month: "Luglio", region: "Calabria", specialty: "Soccorritore", location: "Reggio di Calabria (RC)", area: ["Sociale, Sport e Liturgia"], km: 820 },
+            { id: "25702", period: "02/07 - 06/07", month: "Luglio", region: "Emilia Romagna", specialty: "Guida alpina - Sherpa", location: "Castelnovo ne' Monti (RE)", area: ["Pionieristica e Vita all'Aperto"], km: 110 },
+            { id: "25686", period: "02/07 - 06/07", month: "Luglio", region: "Lazio", specialty: "Pioniere A", location: "Bracciano (RM)", area: ["Pionieristica e Vita all'Aperto"], km: 260 },
+            { id: "25685", period: "02/07 - 05/07", month: "Luglio", region: "Piemonte", specialty: "Esploratore delle acque", location: "Rivarone (AL)", area: ["Nautica"], km: 280 },
+            { id: "25701", period: "02/07 - 06/07", month: "Luglio", region: "Puglia", specialty: "Trappeur - Espl. acque", location: "Massafra (TA)", area: ["Nautica", "Pionieristica e Vita all'Aperto"], km: 680 },
+            { id: "25703", period: "02/07 - 06/07", month: "Luglio", region: "Sicilia", specialty: "Espl. acque - Pioniere", location: "Termini Imerese (PA)", area: ["Nautica", "Pionieristica e Vita all'Aperto"], km: 820 },
+            { id: "25704", period: "04/07 - 08/07", month: "Luglio", region: "Lombardia", specialty: "Trappeur", location: "Colico (LC)", area: ["Pionieristica e Vita all'Aperto"], km: 330 },
+            { id: "25705", period: "07/07 - 12/07", month: "Luglio", region: "Piemonte", specialty: "Guida alpina - Sherpa", location: "Biella (BI)", area: ["Pionieristica e Vita all'Aperto"], km: 335 },
+            { id: "25707", period: "08/07 - 12/07", month: "Luglio", region: "Calabria", specialty: "Cittadino del mondo", location: "Lamezia Terme (CZ)", area: ["Sociale, Sport e Liturgia"], km: 740 },
+            { id: "25713", period: "08/07 - 12/07", month: "Luglio", region: "Campania", specialty: "Giornalista", location: "Teano (CE)", area: ["Mani Abili, Arte e Comunicazione"], km: 430 },
+            { id: "25715", period: "08/07 - 12/07", month: "Luglio", region: "Emilia Romagna", specialty: "Sherpa", location: "Santo Stefano d'Aveto (GE)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25708", period: "08/07 - 12/07", month: "Luglio", region: "Emilia Romagna", specialty: "Sherpa - Naturalista", location: "Bagno di Romagna (FC)", area: ["Pionieristica e Vita all'Aperto"], km: 130 },
+            { id: "25706", period: "08/07 - 12/07", month: "Luglio", region: "Emilia Romagna", specialty: "Trappeur A", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto"], km: 195 },
+            { id: "25748", period: "08/07 - 12/07", month: "Luglio", region: "Piemonte", specialty: "Maestro tecnologie - Pioniere", location: "Salbertrand (TO)", area: ["Mani Abili, Arte e Comunicazione", "Pionieristica e Vita all'Aperto"], km: 400 },
+            { id: "25711", period: "08/07 - 12/07", month: "Luglio", region: "Sicilia", specialty: "Giornalista - Grafico multimediale", location: "Palermo (PA)", area: ["Mani Abili, Arte e Comunicazione"], km: 850 },
+            { id: "25714", period: "09/07 - 13/07", month: "Luglio", region: "Piemonte", specialty: "Artista", location: "Cantalupa (TO)", area: ["Mani Abili, Arte e Comunicazione"], km: 360 },
+            { id: "25716", period: "11/07 - 16/07", month: "Luglio", region: "Friuli Venezia Giulia", specialty: "Pioniere", location: "Andreis (PN)", area: ["Pionieristica e Vita all'Aperto"], km: 380 },
+            { id: "25717", period: "12/07 - 16/07", month: "Luglio", region: "Emilia Romagna", specialty: "Pioniere - Liturgista", location: "Bettola (PC)", area: ["Pionieristica e Vita all'Aperto", "Sociale, Sport e Liturgia"], km: 195 },
+            { id: "25718", period: "15/07 - 19/07", month: "Luglio", region: "Emilia Romagna", specialty: "Liturgista - Mani abili", location: "Monzuno (BO)", area: ["Sociale, Sport e Liturgia", "Mani Abili, Arte e Comunicazione"], km: 65 },
+            { id: "25719", period: "03/08 - 07/08", month: "Agosto", region: "Calabria", specialty: "Sherpa - Naturalista", location: "Santo Stefano in Aspromonte (RC)", area: ["Pionieristica e Vita all'Aperto"], km: 820 },
+            { id: "25720", period: "17/08 - 22/08", month: "Agosto", region: "Lombardia", specialty: "Artista", location: "Colico (LC)", area: ["Mani Abili, Arte e Comunicazione"], km: 330 },
+            { id: "25721", period: "17/08 - 22/08", month: "Agosto", region: "Lombardia", specialty: "Mani abili", location: "Colico (LC)", area: ["Mani Abili, Arte e Comunicazione"], km: 330 },
+            { id: "25722", period: "19/08 - 23/08", month: "Agosto", region: "Campania", specialty: "Grafico mult. - Maestro tecnologie", location: "Aiello del Sabato (AV)", area: ["Mani Abili, Arte e Comunicazione"], km: 510 },
+            { id: "25723", period: "19/08 - 23/08", month: "Agosto", region: "Emilia Romagna", specialty: "Mani abili", location: "Bettola (PC)", area: ["Mani Abili, Arte e Comunicazione"], km: 195 },
+            { id: "25724", period: "19/08 - 23/08", month: "Agosto", region: "Trentino Alto Adige", specialty: "Guida alpina - Sherpa", location: "Trento (TN)", area: ["Pionieristica e Vita all'Aperto"], km: 280 },
+            { id: "25755", period: "20/08 - 25/08", month: "Agosto", region: "Lombardia", specialty: "Pioniere", location: "Brescia (BS)", area: ["Pionieristica e Vita all'Aperto"], km: 245 },
+            { id: "25727", period: "21/08 - 26/08", month: "Agosto", region: "Campania", specialty: "Trappeur", location: "Prignano Cilento (SA)", area: ["Pionieristica e Vita all'Aperto"], km: 580 },
+            { id: "25726", period: "21/08 - 25/08", month: "Agosto", region: "Sicilia", specialty: "Sherpa - Naturalista", location: "Marineo (PA)", area: ["Pionieristica e Vita all'Aperto"], km: 860 },
+            { id: "25725", period: "21/08 - 25/08", month: "Agosto", region: "Veneto", specialty: "Grafico mult. - Maestro tecnologie", location: "Monteviale (VI)", area: ["Mani Abili, Arte e Comunicazione"], km: 240 },
+            { id: "25728", period: "23/08 - 27/08", month: "Agosto", region: "Sardegna", specialty: "Artista-Giornalista-Mani abili", location: "Cagliari (CA)", area: ["Mani Abili, Arte e Comunicazione"], km: 550 },
+            { id: "25731", period: "26/08 - 30/08", month: "Agosto", region: "Emilia Romagna", specialty: "Cittadino mondo - Mani abili", location: "San Leo (RN)", area: ["Sociale, Sport e Liturgia", "Mani Abili, Arte e Comunicazione"], km: 165 },
+            { id: "25729", period: "26/08 - 30/08", month: "Agosto", region: "Sardegna", specialty: "Soccorritore - Guida alpina", location: "Tissi (SS)", area: ["Sociale, Sport e Liturgia", "Pionieristica e Vita all'Aperto"], km: 520 },
+            { id: "25730", period: "26/08 - 30/08", month: "Agosto", region: "Veneto", specialty: "Artista", location: "Monteviale (VI)", area: ["Mani Abili, Arte e Comunicazione"], km: 240 },
+            { id: "25734", period: "27/08 - 31/08", month: "Agosto", region: "Calabria", specialty: "Artista", location: "Reggio di Calabria (RC)", area: ["Mani Abili, Arte e Comunicazione"], km: 820 },
+            { id: "25739", period: "27/08 - 31/08", month: "Agosto", region: "Calabria", specialty: "Pioniere", location: "Cosenza (CS)", area: ["Pionieristica e Vita all'Aperto"], km: 730 },
+            { id: "25736", period: "27/08 - 31/08", month: "Agosto", region: "Calabria", specialty: "Trappeur", location: "Orsomarso (CS)", area: ["Pionieristica e Vita all'Aperto"], km: 680 },
+            { id: "25732", period: "27/08 - 31/08", month: "Agosto", region: "Lombardia", specialty: "Animatore sportivo", location: "Brescia (BS)", area: ["Sociale, Sport e Liturgia"], km: 245 },
+            { id: "25737", period: "28/08 - 01/09", month: "Agosto", region: "Emilia Romagna", specialty: "Maestro delle tecnologie", location: "Verucchio (RN)", area: ["Mani Abili, Arte e Comunicazione"], km: 160 },
+            { id: "25738", period: "31/08 - 04/09", month: "Agosto", region: "Emilia Romagna", specialty: "Animatore sportivo - Artista", location: "Bettola (PC)", area: ["Sociale, Sport e Liturgia", "Mani Abili, Arte e Comunicazione"], km: 195 },
+            { id: "25740", period: "01/09 - 05/09", month: "Settembre", region: "Campania", specialty: "Artista A", location: "Salerno (SA)", area: ["Mani Abili, Arte e Comunicazione"], km: 520 },
+            { id: "25742", period: "02/09 - 06/09", month: "Settembre", region: "Emilia Romagna", specialty: "Esploratore delle acque", location: "Rimini (RN)", area: ["Nautica"], km: 165 },
+            { id: "25744", period: "02/09 - 06/09", month: "Settembre", region: "Piemonte", specialty: "Trappeur", location: "Cantalupa (TO)", area: ["Pionieristica e Vita all'Aperto"], km: 360 },
+            { id: "25743", period: "02/09 - 06/09", month: "Settembre", region: "Sardegna", specialty: "Esploratore delle acque", location: "Porto Torres (SS)", area: ["Nautica"], km: 540 },
+            { id: "25741", period: "02/09 - 06/09", month: "Settembre", region: "Veneto", specialty: "Cittadino del mondo", location: "Monteviale (VI)", area: ["Sociale, Sport e Liturgia"], km: 240 },
+            { id: "25745", period: "03/09 - 07/09", month: "Settembre", region: "Abruzzo", specialty: "Maestro tecnologie - Grafico multimedia", location: "Castel del Monte (AQ)", area: ["Mani Abili, Arte e Comunicazione"], km: 380 },
+            { id: "25746", period: "04/09 - 08/09", month: "Settembre", region: "Piemonte", specialty: "Esploratore delle acque A", location: "Orta San Giulio (NO)", area: ["Nautica"], km: 365 }
+        ];
+
+        let grid, areaSelect, monthSelect, regionSelect, resetBtn, distSlider, distLabel, resultCount, noResults, sectionList, sectionInfo;
+
+        function init() {
+            grid = document.getElementById('adventure-grid');
+            areaSelect = document.getElementById('area-select');
+            monthSelect = document.getElementById('month-select');
+            regionSelect = document.getElementById('region-select');
+            resetBtn = document.getElementById('reset-btn');
+            distSlider = document.getElementById('distance-slider');
+            distLabel = document.getElementById('distance-value');
+            resultCount = document.getElementById('result-count');
+            noResults = document.getElementById('no-results');
+            sectionList = document.getElementById('section-list');
+            sectionInfo = document.getElementById('section-info');
+
+            // Tab Switching
+            document.getElementById('btn-list').addEventListener('click', () => switchTab('list'));
+            document.getElementById('btn-info').addEventListener('click', () => switchTab('info'));
+
+            // Popola menu Regioni
+            const regions = [...new Set(cantieri.map(c => c.region))].sort();
+            regions.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r; 
+                opt.textContent = `${regionConfigs[r]?.icon || '📍'} ${r}`;
+                regionSelect.appendChild(opt);
+            });
+
+            // Listeners
+            [areaSelect, monthSelect, regionSelect, distSlider].forEach(el => {
+                if (el) {
+                    el.addEventListener('input', () => {
+                        if(el.id === 'distance-slider') {
+                            distLabel.textContent = el.value === "1000" ? "Qualsiasi" : `Entro ${el.value} km`;
+                        }
+                        updateGrid();
+                    });
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                areaSelect.value = monthSelect.value = regionSelect.value = 'All';
+                distSlider.value = 1000;
+                distLabel.textContent = "Qualsiasi";
+                updateGrid();
+            });
+
+            updateGrid();
+        }
+
+        function switchTab(tab) {
+            const btnList = document.getElementById('btn-list');
+            const btnInfo = document.getElementById('btn-info');
+            if (tab === 'list') {
+                sectionList.classList.remove('hidden');
+                sectionInfo.classList.add('hidden');
+                btnList.classList.add('tab-active');
+                btnList.classList.remove('text-emerald-900/60');
+                btnInfo.classList.remove('tab-active');
+                btnInfo.classList.add('text-emerald-900/60');
+            } else {
+                sectionList.classList.add('hidden');
+                sectionInfo.classList.remove('hidden');
+                btnInfo.classList.add('tab-active');
+                btnInfo.classList.remove('text-emerald-900/60');
+                btnList.classList.remove('tab-active');
+                btnList.classList.add('text-emerald-900/60');
+            }
+        }
+
+        function getAreaTheme(area) {
+            const themes = {
+                "Pionieristica e Vita all'Aperto": { icon: "⛺", shadow: "shadow-emerald-100" },
+                "Nautica": { icon: "🛶", shadow: "shadow-blue-100" },
+                "Mani Abili, Arte e Comunicazione": { icon: "🎨", shadow: "shadow-orange-100" },
+                "Sociale, Sport e Liturgia": { icon: "🤝", shadow: "shadow-rose-100" }
+            };
+            return themes[area] || themes["Pionieristica e Vita all'Aperto"];
+        }
+
+        function updateGrid() {
+            const fArea = areaSelect.value;
+            const fMonth = monthSelect.value;
+            const fRegion = regionSelect.value;
+            const fDist = parseInt(distSlider.value);
+
+            const filtered = cantieri.filter(c => 
+                (fArea === 'All' || c.area.includes(fArea)) &&
+                (fMonth === 'All' || c.month === fMonth) &&
+                (fRegion === 'All' || c.region === fRegion) &&
+                (c.km <= fDist)
+            );
+
+            grid.innerHTML = '';
+            resultCount.textContent = `Trovate ${filtered.length} avventure che fanno per te!`;
+            
+            if (filtered.length > 0) {
+                noResults.classList.add('hidden');
+            } else {
+                noResults.classList.remove('hidden');
+            }
+
+            filtered.forEach(c => {
+                const theme = getAreaTheme(c.area[0]);
+                const reg = regionConfigs[c.region] || { icon: "📍", color: "border-stone-400", badge: "bg-stone-400" };
+                const card = document.createElement('div');
+                
+                card.className = `adventure-card bg-white rounded-[2.5rem] border-t-8 ${reg.color} border-b-8 ${reg.color} ${theme.shadow} p-7 flex flex-col relative overflow-hidden`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex flex-col">
+                            <span class="text-5xl mb-2">${theme.icon}</span>
+                            <span class="text-[10px] font-black text-emerald-950 uppercase tracking-widest leading-tight max-w-[150px]">${c.area.join(" & ")}</span>
+                        </div>
+                        <div class="flex flex-col items-end text-right">
+                            <span class="${reg.badge} text-white text-[11px] font-black uppercase px-4 py-2 rounded-2xl shadow-lg flex items-center gap-2">
+                                <span>${reg.icon}</span> ${c.region}
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-600 mt-2 bg-emerald-50 px-2 py-1 rounded-lg italic border border-emerald-100">
+                                🚗 ~${c.km} km da Prato
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-2xl font-black text-stone-800 mb-2 leading-tight min-h-[3rem]">${c.specialty}</h4>
+                    
+                    <div class="space-y-3 mb-8 mt-4">
+                        <div class="flex items-center text-xs text-stone-600 bg-stone-50 p-4 rounded-3xl border border-stone-100">
+                            <span class="mr-4 text-2xl">🗓️</span>
+                            <div>
+                                <p class="font-black text-stone-800 text-sm">${c.period}</p>
+                                <p class="text-[10px] opacity-60 uppercase font-bold mt-1">${c.month}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-xs text-stone-600 bg-stone-50 p-4 rounded-3xl border border-stone-100">
+                            <span class="mr-4 text-2xl grayscale opacity-30">📍</span>
+                            <div>
+                                <p class="font-bold text-stone-800 leading-tight">${c.location}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="https://buonacaccia.net/Event.aspx?e=${c.id}" target="_blank" class="mt-auto w-full py-5 bg-emerald-800 text-white font-black rounded-3xl text-xs uppercase tracking-widest hover:bg-orange-500 transition-all text-center flex items-center justify-center gap-3 group">
+                        <span>Vedi su BuonaCaccia</span>
+                        <span class="text-xl group-hover:translate-x-2 transition-transform">🚀</span>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
